@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguridad en Sistemas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header>
+  <h1>Primeros Pasos de Cifrado</h1>
+  <p>César · Atbash</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <div class="section-title">01 · Seleccionar metodo</div>
+    <div class="method-grid">
+      <button class="method-btn active" onclick="setMethod('cesar')" id="btn-cesar">
+        CIFRADO CESAR
+        <span class="method-desc">Desplazamiento circular de N posiciones</span>
+      </button>
+      <button class="method-btn" onclick="setMethod('atbash')" id="btn-atbash">
+        CIFRADO ATBASH
+        <span class="method-desc">Inversion especular del alfabeto</span>
+      </button>
+    </div>
+    <div id="cesar-config" class="visible" style="margin-top:18px;">
+      <div class="field-label">Modulo / Desplazamiento (N)</div>
+      <div class="shift-row">
+        <label>SHIFT:</label>
+        <input type="range" id="shift-slider" min="1" max="94" value="3" oninput="updateShift(this.value)">
+        <span id="shift-display">3</span>
+      </div>
+      <div style="margin-top:8px;">
+        <span class="info-badge"><span class="dot"></span> ASCII desplazado: cada caracter se mueve N posiciones en la tabla ASCII</span>
+      </div>
+    </div>
+    <div id="atbash-info" style="display:none; margin-top:18px;">
+      <span class="info-badge atbash-info"><span class="dot"></span> El primer caracter del conjunto -> ultimo, segundo -> penultimo, y asi sucesivamente</span>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="section-title">02 · Conjunto de caracteres</div>
+    <div class="charset-row">
+      <button class="charset-btn active" onclick="setCharset('alpha')" id="cs-alpha">A-Z a-z</button>
+      <button class="charset-btn" onclick="setCharset('alphanum')" id="cs-alphanum">A-Z a-z 0-9</button>
+      <button class="charset-btn" onclick="setCharset('printable')" id="cs-printable">ASCII imprimible</button>
+      <button class="charset-btn" onclick="setCharset('custom')" id="cs-custom">Personalizado</button>
+    </div>
+    <div id="custom-charset-row" style="display:none; margin-top:12px;">
+      <div class="field-label">Ingresa tu conjunto de caracteres</div>
+      <input type="text" id="custom-charset-input" class="custom-input"
+        placeholder="ej: ABCDEFGHIJKLMNOPQRSTUVWXYZ..."
+        oninput="updateCustomCharset()">
+    </div>
+    <div id="charset-preview"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">03 · Texto</div>
+    <div class="two-col">
+      <div>
+        <div class="field-label">Entrada</div>
+        <textarea id="input-text" placeholder="Escribe aqui tu mensaje..."></textarea>
+      </div>
+      <div>
+        <div class="field-label">Salida</div>
+        <div class="output-box" id="output-box">
+          <span class="output-placeholder" id="output-placeholder">El resultado aparecera aqui...</span>
+          <button class="copy-btn" onclick="copyOutput()" id="copy-btn" style="display:none">COPIAR</button>
+        </div>
+      </div>
+    </div>
+    <div class="action-row" style="margin-top:16px;">
+      <button class="action-btn btn-encrypt" onclick="process('encrypt')">CIFRAR</button>
+      <button class="action-btn btn-decrypt" onclick="process('decrypt')">DESCIFRAR</button>
+    </div>
+  </div>
+
+  <div class="card" style="font-size:0.85rem; line-height:1.8; color:var(--dim);">
+    <div class="section-title">Como funciona</div>
+    <div class="two-col">
+      <div>
+        <span style="color:var(--accent);font-family:'Share Tech Mono',monospace;">CESAR:</span><br>
+        Cada caracter se desplaza N posiciones dentro del conjunto definido. Si el indice se sale del rango, vuelve al inicio (modulo). Un desplazamiento de 3 convierte A-D, B-E, etc.
+      </div>
+      <div>
+        <span style="color:var(--accent2);font-family:'Share Tech Mono',monospace;">ATBASH:</span><br>
+        El caracter en la posicion i del conjunto se reemplaza por el caracter en la posicion (longitud-1-i). Es su propio inverso: descifrar = cifrar nuevamente.
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="script.js" defer></script>
+</body>
+</html>
